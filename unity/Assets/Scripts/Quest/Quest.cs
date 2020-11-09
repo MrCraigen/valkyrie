@@ -905,7 +905,8 @@ public class Quest
         int heroCount = 0;
         foreach (KeyValuePair<string, Dictionary<string, string>> kv in saveData.data)
         {
-            if (kv.Key.IndexOf("Hero") == 0 && kv.Key.IndexOf("HeroSelection") != 0)
+            // Only real heroes contains key "type" in loaded dictionary
+            if (kv.Key.IndexOf("Hero") == 0 && kv.Key.IndexOf("HeroSelection") != 0 && kv.Value.ContainsKey("type"))
             {
                 heroCount++;
                 heroes.Add(new Hero(kv.Value));
@@ -1748,7 +1749,11 @@ public class Quest
         override public void SetColor(Color c)
         {
             if (image != null && image.gameObject != null) image.color = c;
-            if (uiText != null && uiText.gameObject != null) uiText.color = c;
+            if (uiText != null && uiText.gameObject != null)
+            {
+                uiText.color = c;
+                uiText.canvasRenderer.SetAlpha(c.a);
+            }
             if (border != null) border.SetColor(c);
             // Text BG has its own color, only alpha is changing
             if (uiTextBG != null && uiTextBG.gameObject != null && qUI.textBackgroundColor != "transparent")
